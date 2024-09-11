@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
   },
   colorTextSecondary: { color: theme.colors.textSecondary },
   colorPrimary: { color: theme.colors.colorPrimary },
+  colorTextAppBar: { color: theme.colors.appBarText },
   fontSizeSubheading: { fontSize: theme.fontSize.subheading },
   fontWeightBold: { fontWeight: theme.fontWeights.bold },
 });
@@ -20,6 +21,7 @@ const Text = ({ color, fontSize, fontWeight, style, ...props }) => {
     styles.text,
     color === 'textSecondary' && styles.colorTextSecondary,
     color === 'primary' && styles.colorPrimary,
+    color === 'appBar' && styles.colorTextAppBar,
     fontSize === 'subheading' && styles.fontSizeSubheading,
     fontWeight === 'bold' && styles.fontWeightBold,
     style,
