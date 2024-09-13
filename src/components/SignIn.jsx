@@ -17,15 +17,15 @@ const SignIn = () => {
     const { username, password } = values;
 
     try {
-      const { data } = await signIn({ username, password });
-      console.log('Data:', data); // Log the data if successful
+      const result = await signIn({ username, password });
+      console.log('Sign-in result:', result); // Log the entire result object
     } catch (e) {
       if (e.networkError) {
-        console.log('Network error:', e.networkError); // More specific network error logging
+        console.log('Network error:', e.networkError);
       } else if (e.graphQLErrors) {
-        console.log('GraphQL errors:', e.graphQLErrors); // Log GraphQL errors if they exist
+        console.log('GraphQL errors:', e.graphQLErrors);
       } else {
-        console.log('Other error:', e); // Other errors
+        console.log('Other error:', e);
       }
     }
   };
