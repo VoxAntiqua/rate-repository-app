@@ -19,7 +19,7 @@ const ItemStat = ({ statName, statValue }) => {
   };
 
   return (
-    <View style={style.container}>
+    <View style={style.container} testID={statName}>
       <Text fontWeight="bold">{formatStatValue(statValue)}</Text>
       <Text color="textSecondary">{statName}</Text>
     </View>
