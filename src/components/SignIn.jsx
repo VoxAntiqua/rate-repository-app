@@ -3,6 +3,7 @@ import { Formik } from 'formik';
 import theme from '../theme';
 import * as yup from 'yup';
 import Text from './Text';
+import useSignIn from '../hooks/useSignIn';
 
 const validationSchema = yup.object().shape({
   username: yup.string().required('Username is required'),
@@ -10,10 +11,29 @@ const validationSchema = yup.object().shape({
 });
 
 const SignIn = () => {
+  const [signIn] = useSignIn();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+
+    try {
+      const { data } = await signIn({ username, password });
+      console.log('Data:', data); // Log the data if successful
+    } catch (e) {
+      if (e.networkError) {
+        console.log('Network error:', e.networkError); // More specific network error logging
+      } else if (e.graphQLErrors) {
+        console.log('GraphQL errors:', e.graphQLErrors); // Log GraphQL errors if they exist
+      } else {
+        console.log('Other error:', e); // Other errors
+      }
+    }
+  };
+
   return (
     <Formik
       initialValues={{ username: '', password: '' }}
-      onSubmit={(values) => console.log(values)}
+      onSubmit={onSubmit}
       validationSchema={validationSchema}
     >
       {({
