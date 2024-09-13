@@ -4,6 +4,7 @@ import theme from '../theme';
 import * as yup from 'yup';
 import Text from './Text';
 import useSignIn from '../hooks/useSignIn';
+import { useNavigate } from 'react-router-native';
 
 const validationSchema = yup.object().shape({
   username: yup.string().required('Username is required'),
@@ -12,6 +13,7 @@ const validationSchema = yup.object().shape({
 
 const SignIn = () => {
   const [signIn] = useSignIn();
+  const navigate = useNavigate();
 
   const onSubmit = async (values) => {
     const { username, password } = values;
@@ -19,6 +21,7 @@ const SignIn = () => {
     try {
       const result = await signIn({ username, password });
       console.log('Sign-in result:', result); // Log the entire result object
+      navigate('/');
     } catch (e) {
       if (e.networkError) {
         console.log('Network error:', e.networkError);
