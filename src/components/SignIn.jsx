@@ -11,28 +11,7 @@ const validationSchema = yup.object().shape({
   password: yup.string().required('Password is required'),
 });
 
-const SignIn = () => {
-  const [signIn] = useSignIn();
-  const navigate = useNavigate();
-
-  const onSubmit = async (values) => {
-    const { username, password } = values;
-
-    try {
-      const result = await signIn({ username, password });
-      console.log('Sign-in result:', result); // Log the entire result object
-      navigate('/');
-    } catch (e) {
-      if (e.networkError) {
-        console.log('Network error:', e.networkError);
-      } else if (e.graphQLErrors) {
-        console.log('GraphQL errors:', e.graphQLErrors);
-      } else {
-        console.log('Other error:', e);
-      }
-    }
-  };
-
+export const SignInContainer = ({ onSubmit }) => {
   return (
     <Formik
       initialValues={{ username: '', password: '' }}
@@ -84,6 +63,31 @@ const SignIn = () => {
       )}
     </Formik>
   );
+};
+
+const SignIn = () => {
+  const [signIn] = useSignIn();
+  const navigate = useNavigate();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+
+    try {
+      const result = await signIn({ username, password });
+      console.log('Sign-in result:', result); // Log the entire result object
+      navigate('/');
+    } catch (e) {
+      if (e.networkError) {
+        console.log('Network error:', e.networkError);
+      } else if (e.graphQLErrors) {
+        console.log('GraphQL errors:', e.graphQLErrors);
+      } else {
+        console.log('Other error:', e);
+      }
+    }
+  };
+
+  return <SignInContainer onSubmit={onSubmit} />;
 };
 
 const styles = StyleSheet.create({
