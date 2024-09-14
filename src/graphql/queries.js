@@ -18,6 +18,7 @@ export const GET_REPOSITORY = gql`
   query Repository($repositoryId: ID!) {
     repository(id: $repositoryId) {
       ...RepositoryDetails
+      url
     }
   }
   ${REPOSITORY_DETAILS}
