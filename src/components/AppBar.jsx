@@ -46,6 +46,7 @@ const AppBar = () => {
     <View style={styles.container}>
       <ScrollView horizontal>
         <AppBarTab label="Repositories" linkTo="/" />
+        <AppBarTab label="Create a review" linkTo="review" />
         {isLoggedIn ? (
           <Pressable style={styles.signOutButton} onPress={handleSignOut}>
             <Text color="appBar" fontWeight="bold" fontSize="subheading">

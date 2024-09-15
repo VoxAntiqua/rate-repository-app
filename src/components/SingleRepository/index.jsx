@@ -11,8 +11,8 @@ const styles = StyleSheet.create({
   button: {
     height: 50,
     borderRadius: 5,
-    marginBottom: 15,
-    marginHorizontal: 15,
+    marginBottom: 20,
+    marginHorizontal: 20,
     backgroundColor: theme.colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
@@ -67,7 +67,6 @@ const SingleRepository = () => {
   const reviewNodes = repository.reviews
     ? repository.reviews.edges.map((edge) => edge.node)
     : [];
-  console.log(reviewNodes);
 
   const ItemSeparator = () => <View style={styles.separator} />;
 
