@@ -5,8 +5,20 @@ import * as yup from 'yup';
 import Text from './Text';
 
 const validationSchema = yup.object().shape({
-  username: yup.string().required('Username is required'),
-  password: yup.string().required('Password is required'),
+  username: yup
+    .string()
+    .required('Username is required')
+    .min(5, 'Username must be at least 5 characters')
+    .max(30, 'Username must be at most 30 characters'),
+  password: yup
+    .string()
+    .required('Password is required')
+    .min(5, 'Password must be at least 5 characters')
+    .max(50, 'Password must be at most 50 characters'),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password'), null], 'Passwords must match')
+    .required('Password confirmation is required'),
 });
 
 export const SignUpContainer = ({ onSubmit }) => {
@@ -54,6 +66,9 @@ export const SignUpContainer = ({ onSubmit }) => {
             placeholder="Password"
             placeholderTextColor={theme.colors.textSecondary}
           />
+          {touched.confirmPassword && errors.confirmPassword && (
+            <Text color="error">{errors.confirmPassword}</Text>
+          )}
           <TextInput
             style={[
               styles.input,
@@ -63,7 +78,7 @@ export const SignUpContainer = ({ onSubmit }) => {
             ]}
             onChangeText={handleChange('confirmPassword')}
             onBlur={handleBlur('confirmPassword')}
-            value={values.password}
+            value={values.confirmPassword}
             secureTextEntry
             placeholder="Password confirmation"
             placeholderTextColor={theme.colors.textSecondary}
