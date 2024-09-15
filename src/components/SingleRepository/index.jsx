@@ -1,11 +1,11 @@
 import { useParams } from 'react-router-native';
 import { useQuery } from '@apollo/client';
-import { Pressable, StyleSheet, View, Linking } from 'react-native';
+import { Pressable, StyleSheet, View, Linking, FlatList } from 'react-native';
 import Text from '../Text';
 import { GET_REPOSITORY } from '../../graphql/queries';
 import theme from '../../theme';
-import { FlatList } from 'react-native-web';
 import RepositoryItem from '../RepositoryItem';
+import ReviewItem from './ReviewItem';
 
 const styles = StyleSheet.create({
   button: {
@@ -75,13 +75,14 @@ const SingleRepository = () => {
     <FlatList
       data={reviewNodes}
       ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => (
-        <View>
-          <Text>{item.text}</Text>
-        </View>
-      )}
+      renderItem={({ item }) => <ReviewItem item={item} />}
       keyExtractor={(item) => item.id}
-      ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+      ListHeaderComponent={() => (
+        <>
+          <RepositoryInfo repository={repository} />
+          <ItemSeparator />
+        </>
+      )}
     />
   );
 };

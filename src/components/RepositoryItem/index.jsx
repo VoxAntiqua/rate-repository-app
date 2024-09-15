@@ -8,12 +8,6 @@ const RepositoryItem = ({ item }) => {
     container: {
       backgroundColor: theme.colors.itemBackground,
     },
-    languageContainer: {
-      backgroundColor: theme.colors.primary,
-      borderRadius: 5,
-      alignSelf: 'baseline',
-      marginTop: 10,
-    },
     logo: {
       width: 60,
       height: 60,
