@@ -3,6 +3,8 @@ import { Formik } from 'formik';
 import Text from './Text';
 import theme from '../theme';
 import * as yup from 'yup';
+import { useNavigate } from 'react-router-native';
+import useCreateReview from '../hooks/useCreateReview';
 
 const styles = StyleSheet.create({
   container: {
@@ -46,7 +48,7 @@ const validationSchema = yup.object().shape({
     .required('Rating is required')
     .min(0, 'Rating must be at least 0')
     .max(100, 'Rating cannot exceed 100'),
-  review: yup.string().optional(),
+  text: yup.string().optional(), // Renamed from 'review' to 'text'
 });
 
 const ReviewFormContainer = ({ onSubmit }) => {
@@ -56,7 +58,7 @@ const ReviewFormContainer = ({ onSubmit }) => {
         ownerName: '',
         repositoryName: '',
         rating: '',
-        review: '',
+        text: '', // Changed 'review' to 'text'
       }}
       onSubmit={onSubmit}
       validationSchema={validationSchema}
@@ -115,17 +117,17 @@ const ReviewFormContainer = ({ onSubmit }) => {
             value={values.rating}
             placeholder="Rating (0-100)"
             placeholderTextColor={theme.colors.textSecondary}
-            keyboardType="numeric"
+            inputMode="numeric"
           />
 
-          {touched.review && errors.review && (
-            <Text color="error">{errors.review}</Text>
+          {touched.text && errors.text && (
+            <Text color="error">{errors.text}</Text>
           )}
           <TextInput
             style={styles.input}
-            onChangeText={handleChange('review')}
-            onBlur={handleBlur('review')}
-            value={values.review}
+            onChangeText={handleChange('text')} // Changed 'review' to 'text'
+            onBlur={handleBlur('text')} // Changed 'review' to 'text'
+            value={values.text} // Changed 'review' to 'text'
             placeholder="Review"
             placeholderTextColor={theme.colors.textSecondary}
             multiline
@@ -141,8 +143,18 @@ const ReviewFormContainer = ({ onSubmit }) => {
 };
 
 const ReviewForm = () => {
-  const onSubmit = (values) => {
-    console.log('Review form submitted with values:', values);
+  const { createReview } = useCreateReview();
+  const navigate = useNavigate();
+  const onSubmit = async (values) => {
+    try {
+      const { data } = await createReview(values);
+      const repositoryId = data.createReview.repositoryId;
+
+      navigate(`/repository/${repositoryId}`);
+      console.log('Review created successfully');
+    } catch (e) {
+      console.log('Failed to create review:', e);
+    }
   };
   return <ReviewFormContainer onSubmit={onSubmit} />;
 };
