@@ -34,12 +34,38 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({ repositories }) => {
+export const RepositoryListContainer = ({
+  repositories,
+  setOrderBy,
+  setOrderDirection,
+}) => {
   const [visible, setVisible] = useState(false);
   const [order, setOrder] = useState('latest');
 
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
+
+  const handleOrderSelection = (selectedOrder) => {
+    setOrder(selectedOrder);
+    switch (selectedOrder) {
+      case 'latest':
+        setOrderBy('CREATED_AT');
+        setOrderDirection('DESC');
+        break;
+      case 'ratingDescending':
+        setOrderBy('RATING_AVERAGE');
+        setOrderDirection('DESC');
+        break;
+      case 'ratingAscending':
+        setOrderBy('RATING_AVERAGE');
+        setOrderDirection('ASC');
+        break;
+      default:
+        setOrderBy('CREATED_AT');
+        setOrderDirection('DESC');
+    }
+    closeMenu();
+  };
 
   const getOrderLabel = (order) => {
     switch (order) {
@@ -79,24 +105,15 @@ export const RepositoryListContainer = ({ repositories }) => {
               contentStyle={styles.menuContainer}
             >
               <Menu.Item
-                onPress={() => {
-                  setOrder('latest');
-                  closeMenu();
-                }}
+                onPress={() => handleOrderSelection('latest')}
                 title="Latest"
               />
               <Menu.Item
-                onPress={() => {
-                  setOrder('ratingDescending');
-                  closeMenu();
-                }}
+                onPress={() => handleOrderSelection('ratingDescending')}
                 title="Rating (descending)"
               />
               <Menu.Item
-                onPress={() => {
-                  setOrder('ratingAscending');
-                  closeMenu();
-                }}
+                onPress={() => handleOrderSelection('ratingAscending')}
                 title="Rating (ascending)"
               />
             </Menu>
@@ -118,9 +135,17 @@ export const RepositoryListContainer = ({ repositories }) => {
 };
 
 const RepositoryList = () => {
-  const { repositories } = useRepositories();
+  const [orderBy, setOrderBy] = useState('CREATED_AT');
+  const [orderDirection, setOrderDirection] = useState('DESC');
+  const { repositories } = useRepositories({ orderBy, orderDirection });
 
-  return <RepositoryListContainer repositories={repositories} />;
+  return (
+    <RepositoryListContainer
+      repositories={repositories}
+      setOrderBy={setOrderBy}
+      setOrderDirection={setOrderDirection}
+    />
+  );
 };
 
 export default RepositoryList;
