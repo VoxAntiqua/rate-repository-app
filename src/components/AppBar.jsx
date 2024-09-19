@@ -50,6 +50,7 @@ const AppBar = () => {
         {isLoggedIn ? (
           <>
             <AppBarTab label="Create a review" linkTo="review" />
+            <AppBarTab label="My reviews" linkTo="myReviews" />
             <Pressable style={styles.signOutButton} onPress={handleSignOut}>
               <Text color="appBar" fontWeight="bold" fontSize="subheading">
                 Sign out
