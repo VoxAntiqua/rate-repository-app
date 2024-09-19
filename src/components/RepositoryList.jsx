@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
   menuButtonContainer: {
     alignItems: 'center',
-    margin: 10,
+    margin: 20,
   },
   menuButton: {
     height: 50,
@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 10,
-    marginBottom: 10,
+    marginHorizontal: 20,
+    marginBottom: 20,
   },
   buttonText: {
     color: theme.colors.appBarText,
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.itemBackground,
     height: 50,
     borderRadius: 5,
-    margin: 10,
+    margin: 20,
   },
 });
 
