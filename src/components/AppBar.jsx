@@ -1,7 +1,6 @@
-import { useQuery } from '@apollo/client';
 import useAuthStorage from '../hooks/useAuthStorage';
 import { useApolloClient } from '@apollo/client';
-import { ME } from '../graphql/queries';
+import useCurrentUser from '../hooks/useCurrentUser';
 import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Text from './Text';
 
@@ -24,7 +23,9 @@ const styles = StyleSheet.create({
 const AppBar = () => {
   const authStorage = useAuthStorage();
   const apolloClient = useApolloClient();
-  const { data, loading, error } = useQuery(ME);
+
+  const { user, loading, error } = useCurrentUser({ includeReviews: false });
+
   if (loading) return null;
   if (error) {
     console.error('Error fetching user data:', error);
@@ -40,7 +41,7 @@ const AppBar = () => {
     }
   };
 
-  const isLoggedIn = data && data.me;
+  const isLoggedIn = Boolean(user);
 
   return (
     <View style={styles.container}>

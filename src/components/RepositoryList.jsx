@@ -2,7 +2,7 @@ import { FlatList, View, StyleSheet, Pressable } from 'react-native';
 import RepositoryItem from './RepositoryItem';
 import useRepositories from '../hooks/useRepositories';
 import { Link } from 'react-router-native';
-import { Menu, Button, PaperProvider } from 'react-native-paper';
+import { Menu, Button, PaperProvider, Searchbar } from 'react-native-paper';
 import { useState } from 'react';
 import theme from '../theme';
 
@@ -20,7 +20,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
+    marginHorizontal: 10,
+    marginBottom: 10,
   },
   buttonText: {
     color: theme.colors.appBarText,
@@ -30,6 +31,12 @@ const styles = StyleSheet.create({
   menuContainer: {
     backgroundColor: theme.colors.itemBackground,
   },
+  searchbar: {
+    backgroundColor: theme.colors.itemBackground,
+    height: 50,
+    borderRadius: 5,
+    margin: 10,
+  },
 });
 
 const ItemSeparator = () => <View style={styles.separator} />;
@@ -38,6 +45,8 @@ export const RepositoryListContainer = ({
   repositories,
   setOrderBy,
   setOrderDirection,
+  searchQuery,
+  setSearchQuery,
 }) => {
   const [visible, setVisible] = useState(false);
   const [order, setOrder] = useState('latest');
@@ -89,6 +98,17 @@ export const RepositoryListContainer = ({
       <FlatList
         ListHeaderComponent={
           <View>
+            <Searchbar
+              style={styles.searchbar}
+              inputStyle={{ color: theme.colors.textPrimary }}
+              placeholder="Filter repositories..."
+              placeholderTextColor={theme.colors.textSecondary}
+              iconColor={theme.colors.textPrimary}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              clearIcon="close"
+              onIconPress={() => setSearchQuery('')}
+            />
             <Menu
               visible={visible}
               onDismiss={closeMenu}
@@ -137,13 +157,21 @@ export const RepositoryListContainer = ({
 const RepositoryList = () => {
   const [orderBy, setOrderBy] = useState('CREATED_AT');
   const [orderDirection, setOrderDirection] = useState('DESC');
-  const { repositories } = useRepositories({ orderBy, orderDirection });
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const { repositories } = useRepositories({
+    orderBy,
+    orderDirection,
+    searchKeyword: searchQuery,
+  });
 
   return (
     <RepositoryListContainer
       repositories={repositories}
       setOrderBy={setOrderBy}
       setOrderDirection={setOrderDirection}
+      searchQuery={searchQuery}
+      setSearchQuery={setSearchQuery}
     />
   );
 };
