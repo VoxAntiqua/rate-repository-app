@@ -3,6 +3,7 @@ import { useApolloClient } from '@apollo/client';
 import useCurrentUser from '../hooks/useCurrentUser';
 import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Text from './Text';
+import { useNavigate } from 'react-router-native';
 
 import Constants from 'expo-constants';
 import theme from '../theme';
@@ -23,6 +24,7 @@ const styles = StyleSheet.create({
 const AppBar = () => {
   const authStorage = useAuthStorage();
   const apolloClient = useApolloClient();
+  const navigate = useNavigate();
 
   const { user, loading, error } = useCurrentUser({ includeReviews: false });
 
@@ -35,6 +37,7 @@ const AppBar = () => {
   const handleSignOut = async () => {
     try {
       await authStorage.removeAccessToken();
+      navigate('/');
       await apolloClient.resetStore();
     } catch (e) {
       console.error('Sign out error:', e);
