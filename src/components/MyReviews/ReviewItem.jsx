@@ -1,10 +1,11 @@
-import { View, StyleSheet, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable, Alert } from 'react-native';
 import Text from '../Text';
 import theme from '../../theme';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-native';
+import useDeleteReview from '../../hooks/useDeleteReview';
 
-const ReviewItem = ({ item }) => {
+const ReviewItem = ({ item, refetch }) => {
   const style = StyleSheet.create({
     container: {
       backgroundColor: theme.colors.itemBackground,
@@ -69,6 +70,38 @@ const ReviewItem = ({ item }) => {
   });
 
   const navigate = useNavigate();
+  const [deleteReview] = useDeleteReview();
+
+  const handleDeleteReview = async (reviewId) => {
+    try {
+      const response = await deleteReview({ id: reviewId });
+      console.log('Delete review response:', response);
+      refetch();
+    } catch (e) {
+      if (e.networkError) {
+        console.log('Network error:', e.networkError);
+      } else if (e.graphQLErrors) {
+        console.log('GraphQL errors:', e.graphQLErrors);
+      } else {
+        console.log('Other error:', e);
+      }
+    }
+  };
+
+  const deleteAlert = () => {
+    Alert.alert(
+      'Delete review',
+      'Are you sure you want to delete this review?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('cancel pressed'),
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: () => handleDeleteReview(item.id) },
+      ]
+    );
+  };
 
   return (
     <View>
@@ -105,7 +138,7 @@ const ReviewItem = ({ item }) => {
         >
           <Text style={style.buttonText}>View repository</Text>
         </Pressable>
-        <Pressable style={style.buttonRight}>
+        <Pressable style={style.buttonRight} onPress={deleteAlert}>
           <Text style={style.buttonText}>Delete review</Text>
         </Pressable>
       </View>

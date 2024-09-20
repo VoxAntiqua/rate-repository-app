@@ -13,7 +13,9 @@ const styles = StyleSheet.create({
 });
 
 const MyReviews = () => {
-  const { user, loading, error } = useCurrentUser({ includeReviews: true });
+  const { user, loading, error, refetch } = useCurrentUser({
+    includeReviews: true,
+  });
 
   if (loading) return null;
   if (error) {
@@ -31,7 +33,7 @@ const MyReviews = () => {
     <FlatList
       data={reviewNodes}
       ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => <ReviewItem item={item} />}
+      renderItem={({ item }) => <ReviewItem item={item} refetch={refetch} />}
       keyExtractor={(item) => item.id}
     />
   );
