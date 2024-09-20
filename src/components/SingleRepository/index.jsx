@@ -1,8 +1,7 @@
 import { useParams } from 'react-router-native';
-import { useQuery } from '@apollo/client';
 import { Pressable, StyleSheet, View, Linking, FlatList } from 'react-native';
+import useRepository from '../../hooks/useRepository';
 import Text from '../Text';
-import { GET_REPOSITORY } from '../../graphql/queries';
 import theme from '../../theme';
 import RepositoryItem from '../RepositoryItem';
 import ReviewItem from './ReviewItem';
@@ -51,9 +50,9 @@ const RepositoryInfo = ({ repository }) => {
 
 const SingleRepository = () => {
   const { repositoryId } = useParams();
-  const { data, loading, error } = useQuery(GET_REPOSITORY, {
-    variables: { repositoryId },
-    fetchPolicy: 'cache-and-network',
+  const { repository, loading, error, fetchMore } = useRepository({
+    repositoryId,
+    first: 3,
   });
 
   if (loading) {
@@ -64,13 +63,13 @@ const SingleRepository = () => {
     return <Text>Error: {error.message}</Text>;
   }
 
-  const repository = data?.repository;
   const reviewNodes = repository.reviews
     ? repository.reviews.edges.map((edge) => edge.node)
     : [];
 
   const onEndReach = () => {
     console.log('You have reached the end of the list');
+    fetchMore();
   };
 
   const ItemSeparator = () => <View style={styles.separator} />;
