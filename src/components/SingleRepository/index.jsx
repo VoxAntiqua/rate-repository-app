@@ -69,11 +69,17 @@ const SingleRepository = () => {
     ? repository.reviews.edges.map((edge) => edge.node)
     : [];
 
+  const onEndReach = () => {
+    console.log('You have reached the end of the list');
+  };
+
   const ItemSeparator = () => <View style={styles.separator} />;
 
   return (
     <FlatList
       data={reviewNodes}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
       ItemSeparatorComponent={ItemSeparator}
       renderItem={({ item }) => <ReviewItem item={item} />}
       keyExtractor={(item) => item.id}

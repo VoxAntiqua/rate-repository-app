@@ -47,6 +47,7 @@ export const RepositoryListContainer = ({
   setOrderDirection,
   searchQuery,
   setSearchQuery,
+  onEndReach,
 }) => {
   const [visible, setVisible] = useState(false);
   const [order, setOrder] = useState('latest');
@@ -149,6 +150,8 @@ export const RepositoryListContainer = ({
           </Pressable>
         )}
         keyExtractor={(item) => item.id}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
       />
     </PaperProvider>
   );
@@ -159,11 +162,16 @@ const RepositoryList = () => {
   const [orderDirection, setOrderDirection] = useState('DESC');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { repositories } = useRepositories({
+  const { repositories, fetchMore } = useRepositories({
+    first: 4,
     orderBy,
     orderDirection,
     searchKeyword: searchQuery,
   });
+
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   return (
     <RepositoryListContainer
@@ -172,6 +180,7 @@ const RepositoryList = () => {
       setOrderDirection={setOrderDirection}
       searchQuery={searchQuery}
       setSearchQuery={setSearchQuery}
+      onEndReach={onEndReach}
     />
   );
 };
